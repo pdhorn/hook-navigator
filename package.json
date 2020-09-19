@@ -1,0 +1,24 @@
+{
+  "name": "hook-navigator",
+  "version": "0.0.1",
+  "description": "navigate react hook dependencies to find multiple useEffect calls",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "react",
+    "hook",
+    "dependency",
+    "navigator",
+    "detector"
+  ],
+  "author": "Peter Horn",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/preset-env": "^7.11.5",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.4.2"
+  }
+}
