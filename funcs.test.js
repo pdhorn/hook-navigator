@@ -1,4 +1,4 @@
-import { parseUseEffects, isMatched } from "./funcs";
+import { parseUseEffects, isMatched, functionToArgs } from "./funcs";
 
 const someCode = `const handleSetBEvent = (e) => {
   setB(e.target.value);
@@ -55,4 +55,32 @@ test("checks '[hi(there])' is not parenteses-matched", () => {
 
 test("checks 'hi(there]' throws error", () => {
   expect(() => isMatched("hi(there]")).toThrow();
+});
+
+test("checks 'func(arg1, arg2)' parses", () => {
+  expect(functionToArgs("func(arg1, arg2)")).toMatchObject(["arg1", "arg2"]);
+});
+
+test("checks 'func(arg1, [arg2])' parses", () => {
+  expect(functionToArgs("func(arg1, [arg2])")).toMatchObject([
+    "arg1",
+    "[arg2]",
+  ]);
+});
+
+test("checks 'func(arg1, [arg2, arg3])' parses", () => {
+  expect(functionToArgs("func(arg1, [arg2, arg3])")).toMatchObject([
+    "arg1",
+    "[arg2, arg3]",
+  ]);
+});
+
+test("checks 'func(arg1, [arg2,], arg3, {arg4: 4,})' parses", () => {
+  expect(
+    functionToArgs("func(arg1, [arg2,], arg3, {arg4: 4,})")
+  ).toMatchObject(["arg1", "[arg2,]", "arg3", "{arg4: 4,}"]);
+});
+
+test("checks 'func(arg1, [)' does not parse", () => {
+  expect(() => isMatched(functionToArgs("func(arg1, [)"))).toThrow();
 });

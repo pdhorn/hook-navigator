@@ -50,4 +50,58 @@ const isMatched = (snippet) => {
   return stack.length === 0;
 };
 
-export { parseUseEffects, isMatched };
+/**
+ * given a string representing a function call
+ * returns array of strings that are the args
+ * This function assumes everything before the first ( is the function name
+ * and that the last ) is the end of the function params
+ * @param {string} functionCall
+ * @return {Array}
+ */
+const functionToArgs = (functionCall) => {
+  const firstOpenParenthesisIndex = functionCall.indexOf("(");
+  const lastCloseParenthesisIndex = functionCall.lastIndexOf(")");
+  functionCall = functionCall.substring(
+    firstOpenParenthesisIndex + 1,
+    lastCloseParenthesisIndex
+  );
+  // find `,` not inside matched substrings
+  // a minimally-matched substring would be () or (()=>{})
+  // but not ()=>{} or []{}()
+  // I want to catch the first comma in `hey, [a,b]` but not the second
+  let indicesOfMinimallyMatchedSubstrings = [];
+  for (let i = 0; i < functionCall.length; i++) {
+    for (let j = i + 1; j <= functionCall.length; j++) {
+      const sub = functionCall.substring(i, j);
+      if (["(", "[", "{"].includes(sub[0])) {
+        if (isMatched(sub)) {
+          indicesOfMinimallyMatchedSubstrings.push([i, j]);
+          break;
+        }
+      }
+    }
+  }
+  var regex = /,/gi,
+    result,
+    indicesOfCommas = [];
+  while ((result = regex.exec(functionCall))) {
+    indicesOfCommas.push(result.index);
+  }
+  indicesOfCommas = indicesOfCommas.filter((comma) =>
+    indicesOfMinimallyMatchedSubstrings.every(
+      (range) => !(comma >= range[0] && comma < range[1])
+    )
+  );
+
+  // split functionCall into array of substrings split by the `,`s
+  indicesOfCommas.push(functionCall.length);
+  indicesOfCommas.unshift(-1);
+  const val = indicesOfCommas
+    .slice(0, indicesOfCommas.length - 1)
+    .map((commaIndex, arrayIndex) =>
+      functionCall.slice(commaIndex + 1, indicesOfCommas[arrayIndex + 1]).trim()
+    );
+  return val;
+};
+
+export { parseUseEffects, isMatched, functionToArgs };
