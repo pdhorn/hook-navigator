@@ -104,4 +104,22 @@ const functionToArgs = (functionCall) => {
   return val;
 };
 
-export { parseUseEffects, isMatched, functionToArgs };
+// next thing: after functionToArgs, get all state variables in the second argument
+/**
+ * given array of strings, which is args of a functioncall
+ * e.g. output of functionToArgs,
+ * checks if the second argument is an array and
+ * returns an array of strings which are the
+ * variable names in the array
+ * (use case is parsing dependency array from call to useEffect)
+ * @param {Array} argsArray
+ * @return {Array}
+ */
+const getVarsFromSecondArgOfFunction = (argsArray) => {};
+
+export {
+  parseUseEffects,
+  isMatched,
+  functionToArgs,
+  getVarsFromSecondArgOfFunction,
+};

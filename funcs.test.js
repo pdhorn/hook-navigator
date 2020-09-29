@@ -1,4 +1,9 @@
-import { parseUseEffects, isMatched, functionToArgs } from "./funcs";
+import {
+  parseUseEffects,
+  isMatched,
+  functionToArgs,
+  getVarsFromSecondArgOfFunction,
+} from "./funcs";
 
 const someCode = `const handleSetBEvent = (e) => {
   setB(e.target.value);
@@ -83,4 +88,34 @@ test("checks 'func(arg1, [arg2,], arg3, {arg4: 4,})' parses", () => {
 
 test("checks 'func(arg1, [)' does not parse", () => {
   expect(() => isMatched(functionToArgs("func(arg1, [)"))).toThrow();
+});
+
+test("checks getVarsFromSecondArgOfFunction throws error if not all args are strings", () => {
+  expect(() => getVarsFromSecondArgOfFunction([1, "b"])).toThrow();
+});
+
+test("checks getVarsFromSecondArgOfFunction throws error if second arg is not an array", () => {
+  expect(() => getVarsFromSecondArgOfFunction(["a", "b"])).toThrow();
+});
+
+test("checks getVarsFromSecondArgOfFunction throws error if more than 2 args passed", () => {
+  expect(() => getVarsFromSecondArgOfFunction(["a", "b", "c"])).toThrow();
+});
+
+test("checks getVarsFromSecondArgOfFunction gets one arg", () => {
+  expect(getVarsFromSecondArgOfFunction(["a", "[blarg]"])).toBe(["blarg"]);
+});
+
+test("checks getVarsFromSecondArgOfFunction gets two args", () => {
+  expect(getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg]"])).toBe([
+    "blarg",
+    "deblarg",
+  ]);
+});
+
+test("checks getVarsFromSecondArgOfFunction gets two args, with extra comma", () => {
+  expect(getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg,]"])).toBe([
+    "blarg",
+    "deblarg",
+  ]);
 });
