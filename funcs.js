@@ -115,7 +115,22 @@ const functionToArgs = (functionCall) => {
  * @param {Array} argsArray
  * @return {Array}
  */
-const getVarsFromSecondArgOfFunction = (argsArray) => {};
+const getVarsFromSecondArgOfFunction = (argsArray) => {
+  if (argsArray.length > 2) {
+    throw (
+      "Argument array must have length 2 but has length " + argsArray.length
+    );
+  }
+  let second = argsArray[1].trim();
+  if (second[0] !== "[" || second[second.length - 1] !== "]") {
+    throw "Second argument doesn't appear to be an array";
+  }
+  return second
+    .slice(1, second.length - 1)
+    .split(",")
+    .map((x) => x.trim())
+    .filter((x) => x.length > 0);
+};
 
 export {
   parseUseEffects,

@@ -103,19 +103,19 @@ test("checks getVarsFromSecondArgOfFunction throws error if more than 2 args pas
 });
 
 test("checks getVarsFromSecondArgOfFunction gets one arg", () => {
-  expect(getVarsFromSecondArgOfFunction(["a", "[blarg]"])).toBe(["blarg"]);
+  expect(getVarsFromSecondArgOfFunction(["a", "[blarg]"])).toMatchObject([
+    "blarg",
+  ]);
 });
 
 test("checks getVarsFromSecondArgOfFunction gets two args", () => {
-  expect(getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg]"])).toBe([
-    "blarg",
-    "deblarg",
-  ]);
+  expect(
+    getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg]"])
+  ).toMatchObject(["blarg", "deblarg"]);
 });
 
 test("checks getVarsFromSecondArgOfFunction gets two args, with extra comma", () => {
-  expect(getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg,]"])).toBe([
-    "blarg",
-    "deblarg",
-  ]);
+  expect(
+    getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg,]"])
+  ).toMatchObject(["blarg", "deblarg"]);
 });
