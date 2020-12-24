@@ -3,7 +3,14 @@ import {
   isMatched,
   functionToArgs,
   getVarsFromSecondArgOfFunction,
+  identifyStateVariablesAndSetters,
 } from "./funcs";
+
+const fs = require("fs");
+const exampleComponent = fs.readFileSync(
+  "./example/ExampleComponent.js",
+  "utf8"
+);
 
 const someCode = `const handleSetBEvent = (e) => {
   setB(e.target.value);
@@ -118,4 +125,29 @@ test("checks getVarsFromSecondArgOfFunction gets two args, with extra comma", ()
   expect(
     getVarsFromSecondArgOfFunction(["a", "[blarg, deblarg,]"])
   ).toMatchObject(["blarg", "deblarg"]);
+});
+
+test("checks identifyStateVariablesAndSetters gets one liner", () => {
+  expect(
+    identifyStateVariablesAndSetters("const [a, setA] = useState();")
+  ).toMatchObject([{ variable: "a", setter: "setA" }]);
+});
+
+test("checks identifyStateVariablesAndSetters gets ExampleComponent", () => {
+  expect(identifyStateVariablesAndSetters(exampleComponent)).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        variable: "a",
+        setter: "setA",
+      }),
+      expect.objectContaining({
+        variable: "b",
+        setter: "setB",
+      }),
+      expect.objectContaining({
+        variable: "c",
+        setter: "setC",
+      }),
+    ])
+  );
 });

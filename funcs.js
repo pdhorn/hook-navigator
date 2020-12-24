@@ -104,7 +104,6 @@ const functionToArgs = (functionCall) => {
   return val;
 };
 
-// next thing: after functionToArgs, get all state variables in the second argument
 /**
  * given array of strings, which is args of a functioncall
  * e.g. output of functionToArgs,
@@ -132,9 +131,37 @@ const getVarsFromSecondArgOfFunction = (argsArray) => {
     .filter((x) => x.length > 0);
 };
 
+/**
+ * given some code
+ * e.g. a React component
+ * identify state variables and their setters
+ * @param {string} code
+ * @return {Array}
+ */
+const identifyStateVariablesAndSetters = (code) => {
+  const relevantLines = code
+    .split("\n")
+    .map((x) => x.trim())
+    .filter((x) => x.includes("useState"))
+    .map((x) => x.split("useState")[0]);
+  const indicesOfBrackets = relevantLines.map((x) => [
+    x.indexOf("["),
+    x.indexOf("]"),
+  ]);
+  const useStateArray = relevantLines
+    .map((x, ind) =>
+      x.substring(indicesOfBrackets[ind][0], indicesOfBrackets[ind][1] + 1)
+    )
+    .map((x) => x.replace(/\[|\]|\ /g, ""))
+    .map((x) => x.split(","))
+    .map((x) => ({ variable: x[0], setter: x[1] }));
+  return useStateArray;
+};
+
 export {
   parseUseEffects,
   isMatched,
   functionToArgs,
   getVarsFromSecondArgOfFunction,
+  identifyStateVariablesAndSetters,
 };
