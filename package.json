@@ -2,7 +2,7 @@
   "name": "hook-navigator",
   "version": "0.0.1",
   "description": "navigate react hook dependencies to find multiple useEffect calls",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest"
   },

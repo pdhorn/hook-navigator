@@ -5,6 +5,7 @@ import {
   getVarsFromSecondArgOfFunction,
   identifyStateVariablesAndSetters,
   mapUseEffectTriggers,
+  getPaths,
 } from "./funcs";
 
 const fs = require("fs");
@@ -170,4 +171,17 @@ test("checks mapUseEffectTriggers gets exampleComponent", () => {
       }),
     ])
   );
+});
+
+test("checks getPaths gets simple case", () => {
+  expect(
+    getPaths("a", "b", [
+      { source: "a", target: "b" },
+      { source: "a", target: "c" },
+      { source: "b", target: "c" },
+    ])
+  ).toMatchObject([
+    ["a", "b", "c"],
+    ["a", "c"],
+  ]);
 });
