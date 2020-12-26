@@ -158,10 +158,46 @@ const identifyStateVariablesAndSetters = (code) => {
   return useStateArray;
 };
 
+/**
+ * given some code
+ * e.g. a React component
+ * identify state variables that change and trigger
+ * other setters in useEffects
+ * @param {string} code
+ * @return {Array}
+ */
+const mapUseEffectTriggers = (code) => {
+  const filterArrayIfStringContainsElements = (array, string) =>
+    array.filter((x) => string.includes(x));
+  const useStateArray = identifyStateVariablesAndSetters(code);
+  const setterToVariable = (setter) =>
+    useStateArray.filter((x) => x.setter === setter)[0]["variable"];
+  const useEffectsArgs = parseUseEffects(code)
+    .map((ueCall) => functionToArgs(ueCall))
+    .map((args) => [
+      filterArrayIfStringContainsElements(
+        useStateArray.map((z) => z.setter),
+        args[0]
+      ),
+      getVarsFromSecondArgOfFunction(args),
+    ]);
+  const pairsVarsSetWhenVarChanges = useEffectsArgs.map((x) => [
+    x[0].map((z) => setterToVariable(z)),
+    x[1],
+  ]);
+  const varChangeVarSet = pairsVarsSetWhenVarChanges.map((pair) =>
+    pair[1].map((second) =>
+      pair[0].map((first) => ({ source: second, target: first }))
+    )
+  );
+  return varChangeVarSet.flat(2);
+};
+
 export {
   parseUseEffects,
   isMatched,
   functionToArgs,
   getVarsFromSecondArgOfFunction,
   identifyStateVariablesAndSetters,
+  mapUseEffectTriggers,
 };

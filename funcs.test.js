@@ -4,6 +4,7 @@ import {
   functionToArgs,
   getVarsFromSecondArgOfFunction,
   identifyStateVariablesAndSetters,
+  mapUseEffectTriggers,
 } from "./funcs";
 
 const fs = require("fs");
@@ -147,6 +148,25 @@ test("checks identifyStateVariablesAndSetters gets ExampleComponent", () => {
       expect.objectContaining({
         variable: "c",
         setter: "setC",
+      }),
+    ])
+  );
+});
+
+test("checks mapUseEffectTriggers gets exampleComponent", () => {
+  expect(mapUseEffectTriggers(exampleComponent)).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        source: "a",
+        target: "b",
+      }),
+      expect.objectContaining({
+        source: "a",
+        target: "c",
+      }),
+      expect.objectContaining({
+        source: "b",
+        target: "c",
       }),
     ])
   );
