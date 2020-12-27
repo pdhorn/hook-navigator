@@ -31,6 +31,26 @@ const moreComplexPathsAToC = [
   ["a", "b", "d", "c"],
 ];
 
+const secondComplexGraph = [
+  { source: "a", target: "c" },
+  { source: "b", target: "c" },
+  { source: "c", target: "d" },
+  { source: "c", target: "e" },
+  { source: "c", target: "f" },
+  { source: "d", target: "e" },
+  { source: "d", target: "f" },
+];
+
+const secondComplexPathsAToB = [];
+const secondComplexPathsAToF = [
+  ["a", "c", "f"],
+  ["a", "c", "d", "f"],
+];
+const secondComplexPathsBToE = [
+  ["b", "c", "e"],
+  ["b", "c", "d", "e"],
+];
+
 test("checks getPaths gets more complex case a to c", () => {
   const tested = getPaths("a", "c", moreComplexGraph);
   expect(tested).toEqual(expect.arrayContaining(moreComplexPathsAToC));
@@ -41,4 +61,22 @@ test("checks getPaths gets more complex case a to e", () => {
   const tested = getPaths("a", "e", moreComplexGraph);
   expect(tested).toEqual(expect.arrayContaining(moreComplexPathsAToE));
   expect(tested.length).toEqual(moreComplexPathsAToE.length);
+});
+
+test("checks getPaths gets second complex case a to b", () => {
+  const tested = getPaths("a", "b", secondComplexGraph);
+  expect(tested).toEqual(expect.arrayContaining(secondComplexPathsAToB));
+  expect(tested.length).toEqual(secondComplexPathsAToB.length);
+});
+
+test("checks getPaths gets second complex case a to f", () => {
+  const tested = getPaths("a", "f", secondComplexGraph);
+  expect(tested).toEqual(expect.arrayContaining(secondComplexPathsAToF));
+  expect(tested.length).toEqual(secondComplexPathsAToF.length);
+});
+
+test("checks getPaths gets second complex case b to e", () => {
+  const tested = getPaths("b", "e", secondComplexGraph);
+  expect(tested).toEqual(expect.arrayContaining(secondComplexPathsBToE));
+  expect(tested.length).toEqual(secondComplexPathsBToE.length);
 });
