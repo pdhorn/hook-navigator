@@ -71,7 +71,7 @@ const runTarjanOnEdges = (edgeArray) => {
  * @return {Array}
  */
 const getPaths = (origin, destination, edgeArray) => {
-  // look at https://www.geeksforgeeks.org/count-possible-paths-two-vertices/
+  // inspiration from https://www.geeksforgeeks.org/count-possible-paths-two-vertices/
   const tr = runTarjanOnEdges(edgeArray);
   if (!tr.isAcyclic) {
     throw "This graph is cyclic with cycle " + tr.cycles[0];
@@ -88,37 +88,24 @@ const getPaths = (origin, destination, edgeArray) => {
 
   const getPathsHelper = (u, d, paths) => {
     depthCounter += 1;
-    // console.log("depth", depthCounter);
-    // console.log("u", u.name);
-    // console.log("paths", paths);
     u.visited = true;
     if (u.name !== d.name) {
-      //   console.log("got here");
       paths = paths
         .map((p) => {
-          //   console.log(p);
-          //   console.log("last name", p[p.length - 1]);
-          //   console.log("u name", u.name);
           if (p[p.length - 1] === u.name) {
             console.log("end check");
-            return (
-              u.children
-                //   .filter((c) => !c.visited)
-                .map((c) => {
-                  let x = [...p];
-                  x.push(c.name);
-                  return x;
-                })
-            );
+            return u.children.map((c) => {
+              let x = [...p];
+              x.push(c.name);
+              return x;
+            });
           } else {
             return [[...p]];
           }
         })
         .flat();
-      //   console.log("paths", paths);
       u.children.forEach((child) => {
         if (!child.visited) {
-          //   console.log("calling");
           paths = getPathsHelper(child, d, paths);
         }
       });
@@ -137,42 +124,3 @@ const getPaths = (origin, destination, edgeArray) => {
 };
 
 export { buildGraph, getVertexByName, runTarjanOnEdges, getPaths };
-
-// console.log(
-//   runTarjanOnEdges([
-//     { source: "a", target: "b" },
-//     { source: "a", target: "c" },
-//     { source: "b", target: "c" },
-//   ])
-// );
-
-// const moreComplexGraph = [
-//   { source: "a", target: "b" },
-//   { source: "a", target: "c" },
-//   { source: "a", target: "e" },
-//   { source: "b", target: "d" },
-//   { source: "b", target: "e" },
-//   { source: "c", target: "e" },
-//   { source: "d", target: "c" },
-// ];
-
-// const moreComplexPathsAToE = [
-//   ["a", "b", "e"],
-//   ["a", "e"],
-//   ["a", "c"],
-//   ["a", "b", "d", "c", "e"],
-// ];
-// const moreComplexPathsAToC = [
-//   ["a", "c"],
-//   ["a", "b", "d", "c"],
-// ];
-
-// console.log(getPaths("a", "e", moreComplexGraph));
-
-// console.log(
-//   getPaths("b", "c", [
-//     { source: "a", target: "b" },
-//     { source: "a", target: "c" },
-//     { source: "b", target: "c" },
-//   ])
-// );
