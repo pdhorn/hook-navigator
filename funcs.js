@@ -1,10 +1,4 @@
-import { Vertex, TarjanRunner } from "./tarjan.js";
-import {
-  buildGraph,
-  getVertexByName,
-  runTarjanOnEdges,
-  getPaths,
-} from "./graphUtils.js";
+import { getVerticesFromEdgeArray, getPaths } from "./graphUtils.js";
 
 /**
  * Given a string of code
@@ -201,6 +195,32 @@ const mapUseEffectTriggers = (code) => {
   return varChangeVarSet.flat(2);
 };
 
+/**
+ * given some code
+ * e.g. a React component
+ * calculates setter dependencies
+ * key is a state variable name, value is Object
+ * containing counts of setter dependencies and other data
+ * @param {string} code
+ * @return {Object}
+ */
+const getCallChains = (code) => {
+  const uet = mapUseEffectTriggers(code);
+  const vertexNames = getVerticesFromEdgeArray(uet);
+  let val = {};
+  vertexNames.forEach((origin) => {
+    val[origin] = { countPathsTo: {}, pathsTo: {} };
+    vertexNames.forEach((destination) => {
+      if (origin !== destination) {
+        let paths = getPaths(origin, destination, uet);
+        val[origin].countPathsTo[destination] = paths.length;
+        val[origin].pathsTo[destination] = [...paths];
+      }
+    });
+  });
+  return val;
+};
+
 export {
   parseUseEffects,
   isMatched,
@@ -208,4 +228,5 @@ export {
   mapUseEffectTriggers,
   getVarsFromSecondArgOfFunction,
   identifyStateVariablesAndSetters,
+  getCallChains,
 };

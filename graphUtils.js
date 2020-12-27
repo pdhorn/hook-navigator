@@ -93,7 +93,6 @@ const getPaths = (origin, destination, edgeArray) => {
       paths = paths
         .map((p) => {
           if (p[p.length - 1] === u.name) {
-            console.log("end check");
             return u.children.map((c) => {
               let x = [...p];
               x.push(c.name);
@@ -123,4 +122,10 @@ const getPaths = (origin, destination, edgeArray) => {
   );
 };
 
-export { buildGraph, getVertexByName, runTarjanOnEdges, getPaths };
+export {
+  getVerticesFromEdgeArray,
+  buildGraph,
+  getVertexByName,
+  runTarjanOnEdges,
+  getPaths,
+};
