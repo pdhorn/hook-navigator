@@ -1,4 +1,10 @@
 import { Vertex, TarjanRunner } from "./tarjan.js";
+import {
+  buildGraph,
+  getVertexByName,
+  runTarjanOnEdges,
+  getPaths,
+} from "./graphUtils.js";
 
 /**
  * Given a string of code
@@ -195,51 +201,6 @@ const mapUseEffectTriggers = (code) => {
   return varChangeVarSet.flat(2);
 };
 
-/**
- * given the edges of state variable setter dependencies
- * e.g. output of mapUseEffectTriggers
- * returns the TarjanRunner
- * @param {Array} edgeArray
- * @return {TarjanRunner}
- */
-const runTarjanOnEdges = (edgeArray) => {
-  const vertexNames = [
-    ...new Set(edgeArray.map((x) => [x.source, x.target]).flat()),
-  ];
-  let graph = vertexNames.map((v) => new Vertex(v));
-  const getVertexByName = (name, verts) =>
-    verts.filter((v) => v.name === name)[0];
-  edgeArray.map((edge) => {
-    getVertexByName(edge.source, graph).children.push(
-      getVertexByName(edge.target, graph)
-    );
-    return true;
-  });
-  var tr = new TarjanRunner();
-  tr.execute(graph);
-  const isAcyclic = tr.isAcyclic;
-  const cycles = tr.cycles;
-  return tr;
-};
-
-/**
- * given an origin and destination vertex (and the edge array)
- * returns all paths from origin to destination
- * @param {string} origin (vertex)
- * @param {string} destination (vertex)
- * @param {Array} edgeArray
- * @return {TarjanRunner}
- */
-const getPaths = (origin, destination, edgeArray) => {
-  return [];
-};
-
-runTarjanOnEdges([
-  { source: "a", target: "b" },
-  { source: "a", target: "c" },
-  { source: "b", target: "c" },
-]);
-
 export {
   parseUseEffects,
   isMatched,
@@ -247,5 +208,4 @@ export {
   mapUseEffectTriggers,
   getVarsFromSecondArgOfFunction,
   identifyStateVariablesAndSetters,
-  getPaths,
 };

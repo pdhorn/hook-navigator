@@ -65,22 +65,22 @@ function TarjanRunner() {
   };
 }
 
-var v1 = new Vertex("v1");
-var v2 = new Vertex("v2");
-var v3 = new Vertex("v3");
-var v4 = new Vertex("v4");
-var v5 = new Vertex("v5");
-var v6 = new Vertex("v6");
-var v7 = new Vertex("v7");
+// var v1 = new Vertex("v1");
+// var v2 = new Vertex("v2");
+// var v3 = new Vertex("v3");
+// var v4 = new Vertex("v4");
+// var v5 = new Vertex("v5");
+// var v6 = new Vertex("v6");
+// var v7 = new Vertex("v7");
 
-v7.children.push(v6);
-v7.children.push(v5);
+// v7.children.push(v6);
+// v7.children.push(v5);
 
-v6.children.push(v4);
-v6.children.push(v3);
+// v6.children.push(v4);
+// v6.children.push(v3);
 
-v5.children.push(v2);
-v5.children.push(v1);
+// v5.children.push(v2);
+// v5.children.push(v1);
 
 /** Above graph visualized:
  *
