@@ -26,5 +26,5 @@ console.log(
 );
 
 argv.files.forEach((filePath) => {
-  console.log(analyze(filePath));
+  analyze(filePath);
 });
