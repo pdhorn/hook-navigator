@@ -12,9 +12,17 @@
   "keywords": [
     "react",
     "hook",
+    "hooks",
     "dependency",
     "navigator",
-    "detector"
+    "detector",
+    "multiple",
+    "render",
+    "renders",
+    "rerender",
+    "re-render",
+    "rerenders",
+    "re-renders",
   ],
   "author": "Peter Horn",
   "license": "ISC",
