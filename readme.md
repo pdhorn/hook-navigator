@@ -6,7 +6,7 @@ If you've developed in React, you've probably spent time investigating multiple 
 
 ## Example
 
-Suppose you have a React comonent:
+Suppose you have a React component:
 
 ```
 ...
@@ -44,6 +44,8 @@ Schematically, we have the following "call paths" between setters:
   V        V
 setB ---> setC
 </pre>
+
+You can see the two call paths between `a`'s and `c`'s setters.
 
 Running this tool on this example outputs:
 
